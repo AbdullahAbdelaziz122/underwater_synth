@@ -1,6 +1,48 @@
+# requirements.txt for Audio Classification
+
+# -- Core Scientific Computing & Data Handling --
+# For numerical operations and data structures
 numpy==1.26.4
+pandas
 scipy==1.11.4
-matplotlib==3.8.4
+
+# -- Audio Processing & Analysis --
+# Core library for audio analysis and feature extraction
+librosa
+# For reading and writing sound files
 soundfile==0.12.1
+# For audio data augmentation
+audiomentations
+
+# -- Deep Learning Frameworks --
+# NOTE: It's uncommon to use both PyTorch and TensorFlow in one project.
+#       Remove the one you are not using.
+# For PyTorch, it's highly recommended to install via the official command
+# from https://pytorch.org/get-started/locally/ to ensure GPU/CUDA support.
+torch
+torchaudio
+torchvision
+
+# For TensorFlow
+tensorflow
+
+# -- Machine Learning Toolkit --
+# For classical ML models, data splitting, and evaluation metrics
+scikit-learn
+# For working with models and datasets from the Hugging Face Hub
+transformers
+datasets
+
+# -- Utilities & Visualization --
+# For plotting graphs and visualizing audio data
+matplotlib==3.8.4
+# For reading YAML configuration files
 pyyaml==6.0.1
+# For displaying progress bars
 tqdm==4.66.4
+# For experiment logging and visualization
+tensorboard
+
+# -- (Optional) Interactive Development --
+# For running experiments in a Jupyter environment
+notebook
