@@ -46,3 +46,4 @@ tensorboard
 # -- (Optional) Interactive Development --
 # For running experiments in a Jupyter environment
 notebook
+Ipython
