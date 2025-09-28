@@ -1,0 +1,46 @@
+seed: 1337
+fs:
+  submarine: 8000
+  torpedo: 24000
+duration_s:
+  submarine: [20, 30]
+  torpedo: [10, 20]
+classes:
+  submarine:
+    blades: [5, 7]
+    rpm: [60, 180]
+    bands:
+      broad_hz: [20, 500]
+      hub_hz: [100, 400]
+      tip_hz: [300, 1200]
+    alpha_broad: [0.5, 1.0]
+    alpha_hub: [0.7, 1.0]
+    bpf_harmonics: 4
+    tip_bursts:
+      rate_hz: [0.1, 0.6]
+      dur_ms: [50, 200]
+    rpm_drift_pct: [3, 10]
+    rpm_drift_period_s: [10, 60]
+  torpedo:
+    blades: [3, 5]
+    rpm: [2000, 8000]
+    bands:
+      broad_hz: [800, 8000]
+      hub_hz: [300, 1000]
+      tip_hz: [2000, 8000]
+    alpha_broad: [0.3, 0.8]
+    alpha_hub: [0.6, 0.9]
+    bpf_harmonics: 4
+    tip_bursts:
+      rate_hz: [0.6, 2.0]
+      dur_ms: [50, 200]
+    rpm_drift_pct: [10, 20]
+    rpm_drift_period_s: [1, 10]
+propagation:
+  geometry: spherical   # spherical (A=20) or cylindrical (A=10)
+  ranges_m: [500, 10000]
+  source_depth_m: [10, 150]
+  rx_depth_m: [20, 200]
+  sea_state: [0, 6]
+sweeps:
+  snr_dB: [-5, 0, 5]
