@@ -160,7 +160,7 @@ if __name__ == "__main__":
     """
 
     # Load SSP (depth in meters, sound_speed in m/s)
-    ssp_path = "./ssp_data/ssp.csv"
+    ssp_path = "../ssp_data/ssp.csv"
     profile = pd.read_csv(ssp_path)
     ssp = profile.values.tolist()
 
@@ -177,9 +177,9 @@ if __name__ == "__main__":
 
     # Define directories
     fs = 16000
-    source_dir = "./sources"
-    output_dir = "./bellhop_out"
-    impulse_response_out = "./bellhop_envs"
+    source_dir = "../sources"
+    output_dir = "../bellhop_out"
+    impulse_response_out = "../bellhop_envs"
 
     # Run simulation
     bellhop_envs(
