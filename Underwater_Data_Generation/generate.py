@@ -4,8 +4,8 @@ from .pipeline import generate
 import os
 def main():
     # Default arguments
-    config = os.path.join(Path(__file__).parent, "../configs/Enhanced.yaml")
-    out = os.path.join(Path(__file__).parent, "../data/generated_samples")
+    config = os.path.join(Path(__file__).parent, "./configs/Enhanced.yaml")
+    out = os.path.join(Path(__file__).parent, "./data/generated_samples")
     
     
     ap = argparse.ArgumentParser(

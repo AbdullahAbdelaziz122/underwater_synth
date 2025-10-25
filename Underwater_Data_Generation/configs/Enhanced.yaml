@@ -1,0 +1,112 @@
+# Enhanced Underwater Acoustic Signal Synthesis Configuration
+# Physics-based parameters for submarine and torpedo source signals
+
+seed: 1337
+
+# Sampling rates (Hz)
+fs:
+  submarine: 16000  # Increased from 8k for better transient capture
+  torpedo: 24000
+
+# Signal durations (seconds)
+duration_s:
+  submarine: [20, 40]  # Longer for realistic patrol scenarios
+  torpedo: [10, 20]
+
+# Doppler shift modeling (optional, for moving targets)
+doppler:
+  enabled: true
+  velocity_ms: [-5, 15]  # Target velocity in m/s (negative=toward, positive=away)
+                         # Submarines: typically -3 to +10 m/s (6-20 knots)
+                         # Torpedoes: 20-25 m/s (40-50 knots)
+
+# Ambient noise parameters
+ambient:
+  shipping_level: 5  # 0-7 scale: 0=no shipping, 7=heavy shipping
+                     # Affects low-frequency noise (10-300 Hz)
+
+classes:
+  submarine:
+    # Propeller characteristics
+    blades: [5, 7]
+    rpm: [60, 180]  # Patrol: 60-90, Transit: 120-180 RPM
+    
+    # Frequency bands (Hz) for different noise components
+    bands:
+      broad_hz: [20, 500]    # Broadband flow noise
+      hub_hz: [100, 400]     # Hub vortex shedding
+      tip_hz: [300, 1200]    # Tip vortex cavitation
+    
+    # Spectral slope parameters (1/f^alpha)
+    alpha_broad: [0.5, 1.0]  # Flow noise: pink to brown noise
+    alpha_hub: [0.7, 1.0]    # Hub noise: more structured
+    
+    # Blade-pass frequency (BPF) harmonics
+    bpf_harmonics: 5  # Include up to 5th harmonic
+    
+    # Cavitation burst modeling (RPM-dependent)
+    tip_bursts:
+      rate_base_hz: [0.05, 0.2]  # Base rate at threshold RPM (events/sec)
+      rpm_threshold: 120.0        # RPM above which cavitation increases
+      rate_exponent: 3.0          # Rate ~ (RPM/threshold)^exponent
+                                  # Exponent=3: cavitation increases rapidly
+      dur_ms: [50, 200]           # Burst duration (milliseconds)
+    
+    # RPM variability modeling
+    rpm_drift_pct: [3, 8]        # Sinusoidal drift amplitude (% of mean RPM)
+    rpm_drift_period_s: [15, 60] # Drift period (seconds)
+    rpm_walk_std: 1.5            # Random walk std dev (RPM)
+    transient_prob: 0.15         # Probability of speed change per 10s interval
+    
+  torpedo:
+    # Propeller characteristics (high-speed, small diameter)
+    blades: [3, 5]
+    rpm: [2000, 8000]  # High-speed operation
+    
+    # Frequency bands (Hz)
+    bands:
+      broad_hz: [800, 8000]   # Higher frequencies due to high speed
+      hub_hz: [300, 1500]
+      tip_hz: [2000, 10000]
+    
+    # Spectral slope parameters
+    alpha_broad: [0.3, 0.8]  # Less colored (whiter noise)
+    alpha_hub: [0.6, 0.9]
+    
+    # BPF harmonics
+    bpf_harmonics: 6  # More harmonics due to high RPM
+    
+    # Cavitation (more frequent at high speeds)
+    tip_bursts:
+      rate_base_hz: [0.5, 1.5]   # Higher base rate
+      rpm_threshold: 3000.0       # Cavitation threshold
+      rate_exponent: 2.5          # Still increases with speed
+      dur_ms: [30, 150]
+    
+    # RPM variability (more dynamic)
+    rpm_drift_pct: [5, 15]
+    rpm_drift_period_s: [2, 15]  # Faster variations
+    rpm_walk_std: 50.0           # Higher RPM variability
+    transient_prob: 0.25         # More frequent speed changes
+
+# Propagation environment parameters
+# NOTE: In Stage 2, these will be used by Bellhop for accurate propagation
+# In Stage 1, they are stored in metadata only
+propagation:
+  geometry: spherical        # spherical (deep water) or cylindrical (shallow)
+  ranges_m: [500, 10000]     # Source-receiver range
+  source_depth_m: [10, 400]  # Source depth below surface
+  rx_depth_m: [20, 400]      # Receiver depth
+  water_depth_m: [100, 500] # Total water depth (for Bellhop)
+  sea_state: [0, 6]          # Beaufort scale (affects surface loss)
+  
+  # Bottom types (for Bellhop)
+  bottom_types:
+    - "sand"         # Reflective, ~0.8 coefficient
+    - "mud"          # Absorptive, ~0.3 coefficient
+    - "rock"         # Highly reflective, ~0.95 coefficient
+    - "clay"         # Moderate, ~0.5 coefficient
+
+# SNR sweep for dataset diversity
+sweeps:
+  snr_dB: [-10, -5, 0, 5, 10, 15]  # Target SNR in primary signal band
