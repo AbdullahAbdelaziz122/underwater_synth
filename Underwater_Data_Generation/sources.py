@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import numpy as np
-from .utils import tukey_mask
+from utils import tukey_mask
 
 @dataclass
 class ClassParams:

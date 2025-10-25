@@ -4,9 +4,9 @@ from pathlib import Path
 import numpy as np
 from scipy.io import wavfile
 from scipy.signal import stft
-from .utils import rng_from_seed
-from .sources import ClassParams, synthesize
-from .sensors import add_ambient_and_sensor_noise, bandlimit
+from utils import rng_from_seed
+from sources import ClassParams, synthesize
+from sensors import add_ambient_and_sensor_noise, bandlimit
 
 def class_params_from_cfg(name, cfg):
     """Extract class parameters from config."""

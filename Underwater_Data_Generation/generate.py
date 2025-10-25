@@ -1,6 +1,6 @@
 import argparse, json, yaml
 from pathlib import Path
-from .pipeline import generate
+from pipeline import generate
 import os
 def main():
     # Default arguments
