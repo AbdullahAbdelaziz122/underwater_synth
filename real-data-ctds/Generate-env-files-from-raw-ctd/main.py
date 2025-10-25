@@ -11,3 +11,6 @@
 
 
 # Step 5: Run Bellhop and get Transmission losses and Impulse Response
+
+
+# Step 6: Convolve the Impulse Response with a source signal and plot the results
