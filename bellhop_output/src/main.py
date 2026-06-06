@@ -160,10 +160,17 @@ def main(
 if __name__ == "__main__":
     
     bellhop_envs_path= "../bellhop_envs"
-    source_dir = "../sources/submarine/audio"
-    output_dir = "../bellhop_out/submarine_propagated"
+    
+    # Submarine
+    source_dir_sub = "../sources/submarine/audio"
+    output_dir_sub = "../bellhop_out/submarine_propagated"
+    #Topedo
+    source_dir_tor = "../sources/torpedo/audio"
+    output_dir_tor = "../bellhop_out/torpedo_propagated"
+    
     
     main(
-    bellhop_envs_path,
-    source_dir,
-    output_dir)
+    bellhop_envs_path=bellhop_envs_path,
+    source_dir=source_dir_tor,
+    output_dir=output_dir_tor,
+    fs=24000)

@@ -96,7 +96,7 @@ if __name__ == "__main__":
     print("--- Testing Environment Creation Module ---")
     
     # --- Parameters
-    SSP_FILE = "../assets/extended_ssp_0_500m_v2.csv"
+    SSP_FILE = "/Users/abdullahabdelaizz/PycharmProjects/Underwater/real-data-ctds/assets/extended_ssp_0_500m_v2.csv"
     ENV_DEPTH = 500.0
     FREQ = 1500.0
     RECEIVER_DEPTHS = np.linspace(5, 400, 10)
@@ -113,7 +113,8 @@ if __name__ == "__main__":
 
     # --- 2) Plot Environment
     if my_env:
-        plot_environment(my_env)
+        # plot_environment(my_env)
+        pm.plot_env(my_env)
         pm.print_env(my_env)
     else:
         print("Failed to create environment.")
