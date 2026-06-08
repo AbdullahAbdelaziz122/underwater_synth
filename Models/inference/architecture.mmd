@@ -1,0 +1,77 @@
+---
+title: Hierarchical Underwater Acoustic Classification Pipeline
+---
+
+flowchart TD
+    %% ── Input ──────────────────────────────────────────────────────────
+    WAV([🎵 Input WAV File])
+
+    %% ── Preprocessing Pipelines ─────────────────────────────────────────
+    subgraph PRE ["AudioPreprocessor"]
+        direction TB
+        LOAD["load_audio()\nresample → 16 kHz\nconvert_mono()\npad_or_trim → 5 s"]
+
+        subgraph PIPE_A ["Pipeline A  —  128-mel"]
+            MEL128["MelSpectrogram\nn_mels=128  n_fft=1024  hop=512\nOutput: (1,1,128,157)"]
+        end
+
+        subgraph PIPE_B ["Pipeline B  —  64-mel"]
+            MEL64["MelSpectrogram\nn_mels=64  n_fft=1024  hop=512"]
+            ATODB["AmplitudeToDB  top_db=80\nOutput: (1,1,64,157)"]
+            MEL64 --> ATODB
+        end
+    end
+
+    %% ── Stage 1 ─────────────────────────────────────────────────────────
+    subgraph S1 ["Stage 1 — Binary Threat Detector"]
+        direction TB
+        CNN1["SimpleCNN\nConv(1→16)→ReLU→Pool\nConv(16→32)→ReLU→Pool\nConv(32→64)→ReLU→Pool\nFlatten\nLinear(19456→128)→ReLU→Drop\nLinear(128→1)"]
+        SIG1["sigmoid(logit)\nThreshold: 0.5"]
+        CNN1 --> SIG1
+    end
+
+    %% ── Stage 2 ─────────────────────────────────────────────────────────
+    subgraph S2 ["Stage 2 — Threat Classifier"]
+        direction TB
+        CNN2["SimpleCNN\n(identical architecture)"]
+        SIG2["sigmoid(logit)\nThreshold: 0.5"]
+        CNN2 --> SIG2
+    end
+
+    %% ── Stage 3 ─────────────────────────────────────────────────────────
+    subgraph S3 ["Stage 3 — Family Classifier"]
+        direction TB
+        CNN3["FamilyClassifierCNN\nBlock1: Conv(1→32)×2 + BN + Pool\nBlock2: Conv(32→64)×2 + BN + Pool\nBlock3: Conv(64→128)×2 + BN + Pool\nAdaptiveAvgPool2d(1,1)\nLinear(128→256)→BN→ReLU→Drop\nLinear(256→128)→BN→ReLU→Drop\nLinear(128→8)"]
+        SOFT["softmax(logits)\nargmax → class index"]
+        CNN3 --> SOFT
+    end
+
+    %% ── Outputs ─────────────────────────────────────────────────────────
+    THREAT_OUT(["⚠️  Threat\n(Submarine / Torpedo)"])
+    NONTHREAT_OUT(["🐋 Non-Threat\n(Background / Vessel / Dolphin\n Whale / Beluga / Narwhal\n Seal / Walrus)"])
+
+    %% ── Connections ──────────────────────────────────────────────────────
+    WAV --> LOAD
+    LOAD --> MEL128
+    LOAD --> MEL64
+
+    MEL128 --> S1
+    SIG1 -- "prob ≥ 0.5  →  Threat"    --> S2
+    SIG1 -- "prob < 0.5  →  Non-Threat" --> S3
+
+    MEL128 --> S2
+    ATODB  --> S3
+
+    SIG2  --> THREAT_OUT
+    SOFT  --> NONTHREAT_OUT
+
+    %% ── Styling ──────────────────────────────────────────────────────────
+    classDef stage  fill:#1e3a5f,stroke:#4a90d9,color:#fff,rx:8
+    classDef pipe   fill:#2d4a2d,stroke:#5cb85c,color:#fff
+    classDef output fill:#4a2d00,stroke:#f0ad4e,color:#fff
+    classDef input  fill:#3d1a4a,stroke:#9b59b6,color:#fff
+
+    class S1,S2,S3 stage
+    class PIPE_A,PIPE_B pipe
+    class THREAT_OUT,NONTHREAT_OUT output
+    class WAV input
