@@ -118,21 +118,24 @@ class HierarchicalClassifier:
         self.binary_model, reports["binary"] = build_binary_model(
             self.binary_weights, self.device
         )
-	    self.binary_model = self.binary_model.half()
+        self.binary_model = self.binary_model.half()
+
 
         # Stage 2 — Threat Classifier
         logger.info("[Stage 2] Loading Threat Classifier...")
         self.threat_model, reports["threat"] = build_threat_model(
             self.threat_weights, self.device
         )
-	    self.threat_model = self.threat_model.half()
+        self.threat_model = self.threat_model.half()
+	    
 
         # Stage 3 — Family Classifier
         logger.info("[Stage 3] Loading Family Classifier...")
         self.family_model, reports["family"] = build_family_model(
             self.family_weights, self.device, num_classes=FAMILY_CONFIG.num_classes
         )
-	    self.family_model = self.family_model.half()
+        self.family_model = self.family_model.half()
+	    
         # Instantiate preprocessor
         self.preprocessor = AudioPreprocessor(device=self.device)
 
