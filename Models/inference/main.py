@@ -40,6 +40,7 @@ import sys
 from pathlib import Path
 from typing import Dict, Any
 
+import torch
 from inference import HierarchicalClassifier
 
 # ---------------------------------------------------------------------------
