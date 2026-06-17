@@ -40,6 +40,9 @@ import sys
 from pathlib import Path
 from typing import Dict, Any
 
+import torch
+torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic = True
 from inference import HierarchicalClassifier
 
 # ---------------------------------------------------------------------------

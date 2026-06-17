@@ -8,8 +8,8 @@
 #   pip install -r requirements.txt
 
 # Core
-torch>=1.9.0
-torchaudio>=0.9.0
+#torch>=1.9.0
+#torchaudio>=0.9.0
 
 # Utilities (all in stdlib on Python 3.6+, listed for clarity)
 # pathlib  — stdlib
