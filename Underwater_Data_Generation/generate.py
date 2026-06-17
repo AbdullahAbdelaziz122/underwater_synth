@@ -28,7 +28,7 @@ def main():
 
     # Load configuration
     if args.config is None:
-        cfg = yaml.safe_load(open(Path(__file__).parent / "default_config.yaml", "r"))
+        cfg = yaml.safe_load(open(Path(__file__).parent / "configs/Enhanced.yaml", "r"))
     else:
         cfg = yaml.safe_load(open(args.config, "r"))
         
